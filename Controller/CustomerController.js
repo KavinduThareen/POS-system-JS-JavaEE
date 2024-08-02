@@ -13,10 +13,10 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
     let custSalary = document.querySelector('#CustomerManage .custSalary').value;
 
     let customer = {
-        custId: custId,
-        custName: custName,
-        custAddress: custAddress,
-        custSalary: custSalary
+        id: custId,
+        name: custName,
+        address: custAddress,
+        salory: custSalary // Make sure this matches the DTO field
     };
 
     const customerJSON = JSON.stringify(customer);
@@ -24,12 +24,13 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
 
     const http = new XMLHttpRequest();
     http.onreadystatechange = () => {
-        if (http.readyState === 4) {
+        if (http.readyState == 4) {
             console.log("Response text:", http.responseText); // Add this line for debugging
-            if (http.status === 200 || http.status === 201) {
+            if (http.status == 201) {
                 try {
-                    var responseJSON = http.responseText ? JSON.parse(http.responseText) : {};
+                    var responseJSON = JSON.parse(http.responseText);
                     console.log("Response from server:", responseJSON);
+                    alert(responseJSON.message);
                 } catch (e) {
                     console.error("Failed to parse JSON response:", e);
                     console.error("Response text:", http.responseText);
@@ -47,15 +48,16 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
     http.send(customerJSON);
 });
 
+
 // Define the refresh function
-function refresh() {
-    console.log("Refresh function called");
-    // Clear form fields
-    document.querySelector('#CustomerManage .custId').value = '';
-    document.querySelector('#CustomerManage .custName').value = '';
-    document.querySelector('#CustomerManage .custAddress').value = '';
-    document.querySelector('#CustomerManage .custSalary').value = '';
-}
+// function refresh() {
+//     console.log("Refresh function called");
+//     // Clear form fields
+//     document.querySelector('#CustomerManage .custId').value = '';
+//     document.querySelector('#CustomerManage .custName').value = '';
+//     document.querySelector('#CustomerManage .custAddress').value = '';
+//     document.querySelector('#CustomerManage .custSalary').value = '';
+// }
 
 
 
