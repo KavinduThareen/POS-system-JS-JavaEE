@@ -112,23 +112,69 @@ function refresh() {
 
 
 
-// comment ain karana
 
 
 
 
 
-// function loadTable(customer) {
-//     let tableRow = document.querySelector('#CustomerManage .tableRow');
-//     let newRow = document.createElement('tr');
-//     newRow.innerHTML = `
-//         <td>${customer.custId}</td>
-//         <td>${customer.custName}</td>
-//         <td>${customer.custAddress}</td>
-//         <td>${customer.custSalary}</td>
-//     `;
-//     tableRow.appendChild(newRow);
-// }
+
+
+
+
+
+
+
+
+
+
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     const url = 'http://localhost:8080/pos_system_backend_war_exploded/customer';
+//     const tableBody = document.querySelector('.tableRow');
+
+//     if (!tableBody) {
+//         console.error('Table body element not found');
+//         return;
+//     }
+
+//     fetch(url)
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Network response was not ok');
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             console.log('Customer Data:', data);
+
+//             tableBody.innerHTML = ''; // Clear existing rows
+
+//             data.forEach(customer => {
+//                 const row = document.createElement('tr');
+                
+//                 const idCell = document.createElement('td');
+//                 idCell.textContent = customer.id;
+//                 row.appendChild(idCell);
+
+//                 const nameCell = document.createElement('td');
+//                 nameCell.textContent = customer.name;
+//                 row.appendChild(nameCell);
+
+//                 const addressCell = document.createElement('td');
+//                 addressCell.textContent = customer.address;
+//                 row.appendChild(addressCell);
+
+//                 const salaryCell = document.createElement('td');
+//                 salaryCell.textContent = customer.salory;
+//                 row.appendChild(salaryCell);
+
+//                 tableBody.appendChild(row);
+//             });
+//         })
+//         .catch(error => {
+//             console.error('There was a problem with the fetch operation:', error);
+//         });
+// });
 
 
 
@@ -142,44 +188,73 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Customer Data:', data);
+    function fetchAndUpdateTable() {
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Customer Data:', data);
 
-            tableBody.innerHTML = ''; // Clear existing rows
+                tableBody.innerHTML = ''; // Clear existing rows
 
-            data.forEach(customer => {
-                const row = document.createElement('tr');
-                
-                const idCell = document.createElement('td');
-                idCell.textContent = customer.id;
-                row.appendChild(idCell);
+                data.forEach(customer => {
+                    const row = document.createElement('tr');
+                    
+                    const idCell = document.createElement('td');
+                    idCell.textContent = customer.id;
+                    row.appendChild(idCell);
 
-                const nameCell = document.createElement('td');
-                nameCell.textContent = customer.name;
-                row.appendChild(nameCell);
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = customer.name;
+                    row.appendChild(nameCell);
 
-                const addressCell = document.createElement('td');
-                addressCell.textContent = customer.address;
-                row.appendChild(addressCell);
+                    const addressCell = document.createElement('td');
+                    addressCell.textContent = customer.address;
+                    row.appendChild(addressCell);
 
-                const salaryCell = document.createElement('td');
-                salaryCell.textContent = customer.salory;
-                row.appendChild(salaryCell);
+                    const salaryCell = document.createElement('td');
+                    salaryCell.textContent = customer.salory;
+                    row.appendChild(salaryCell);
 
-                tableBody.appendChild(row);
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
             });
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
+    }
+
+    // Initial data load
+    fetchAndUpdateTable();
+
+    // Set up live refresh every 30 seconds (30000 milliseconds)
+    setInterval(fetchAndUpdateTable, 1000);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
