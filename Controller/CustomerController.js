@@ -49,15 +49,16 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
 });
 
 
-// Define the refresh function
-// function refresh() {
-//     console.log("Refresh function called");
-//     // Clear form fields
-//     document.querySelector('#CustomerManage .custId').value = '';
-//     document.querySelector('#CustomerManage .custName').value = '';
-//     document.querySelector('#CustomerManage .custAddress').value = '';
-//     document.querySelector('#CustomerManage .custSalary').value = '';
-// }
+//Define the refresh function
+
+function refresh() {
+    console.log("Refresh function called");
+    // Clear form fields
+    document.querySelector('#CustomerManage .custId').value = '';
+    document.querySelector('#CustomerManage .custName').value = '';
+    document.querySelector('#CustomerManage .custAddress').value = '';
+    document.querySelector('#CustomerManage .custSalary').value = '';
+}
 
 
 
@@ -128,6 +129,95 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
 //     `;
 //     tableRow.appendChild(newRow);
 // }
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const url = 'http://localhost:8080/pos_system_backend_war_exploded/customer';
+    const tableBody = document.querySelector('.tableRow');
+
+    if (!tableBody) {
+        console.error('Table body element not found');
+        return;
+    }
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Customer Data:', data);
+
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            data.forEach(customer => {
+                const row = document.createElement('tr');
+                
+                const idCell = document.createElement('td');
+                idCell.textContent = customer.id;
+                row.appendChild(idCell);
+
+                const nameCell = document.createElement('td');
+                nameCell.textContent = customer.name;
+                row.appendChild(nameCell);
+
+                const addressCell = document.createElement('td');
+                addressCell.textContent = customer.address;
+                row.appendChild(addressCell);
+
+                const salaryCell = document.createElement('td');
+                salaryCell.textContent = customer.salory;
+                row.appendChild(salaryCell);
+
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+});
+
+
+
+
+
+
+
+// URL of your servlet
+// const url = 'http://localhost:8080/pos_system_backend_war_exploded/customer';
+
+// fetch(url)
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//         console.log('Customer Data:', data);
+//     })
+//     .catch(error => {
+//         console.error('There was a problem with the fetch operation:', error);
+//     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
