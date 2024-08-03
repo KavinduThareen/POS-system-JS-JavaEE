@@ -362,5 +362,10 @@ h5{
     padding: 0;
 }
 
+/* Add this CSS to your stylesheet */
+.highlight-red {
+    background-color: red;
+    color: white; /* Optional: to make text more readable on a red background */
+}
 
 

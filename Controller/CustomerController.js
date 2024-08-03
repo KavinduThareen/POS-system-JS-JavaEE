@@ -253,22 +253,9 @@ document.querySelector('#CustomerManage .updateBtn').addEventListener('click', f
 
 
 
-// URL of your servlet
-// const url = 'http://localhost:8080/pos_system_backend_war_exploded/customer';
 
-// fetch(url)
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//         }
-//         return response.json();
-//     })
-//     .then(data => {
-//         console.log('Customer Data:', data);
-//     })
-//     .catch(error => {
-//         console.error('There was a problem with the fetch operation:', error);
-//     });
+
+
 
 
 
@@ -322,9 +309,9 @@ document.querySelector('#CustomerManage .updateBtn').addEventListener('click', f
 //     reloadTable();
 // }
 
-// document.querySelector('#CustomerManage .cleatBtn').addEventListener('click', function() {
-//     refresh();
-// });
+document.querySelector('#CustomerManage .cleatBtn').addEventListener('click', function() {
+    refresh();
+});
 
 // document.querySelector('#CustomerManage .searchBtn').addEventListener('click', function() {
 //     let customerId = document.querySelector('#CustomerManage .custId').value;
@@ -366,17 +353,43 @@ document.querySelector('#CustomerManage .updateBtn').addEventListener('click', f
 //     });
 // }
 
-// document.querySelector('#CustomerManage .removeBtn').addEventListener('click', function() {
-//     let customers = getAllCustomers();
-//     let customerId = document.querySelector('#CustomerManage .custId').value;
-//     let index = customers.findIndex(c => c.custId === customerId);
-//     if (index >= 0) {
-//         deleteCustomer(index);
-//         refresh();
-//     } else {
-//         alert('Customer Not Found');
-//     }
-// });
+
+//Delete
+
+document.querySelector('#CustomerManage .removeBtn').addEventListener('click', async function() {
+    let customerId = document.querySelector('#CustomerManage .custId').value;
+
+    if (!customerId) {
+        alert('Please enter a customer ID');
+        return;
+    }
+
+    try {
+        let response = await fetch(`http://localhost:8080/pos_system_backend_war_exploded/customer?id=${customerId}`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            let result = await response.json();
+            alert(result.message);
+            refresh(); // Assuming refresh() is a function to reload the customer list
+        } else {
+            let error = await response.json();
+            alert(error.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while deleting the customer.');
+    }
+});
+
+
+
+
+
+
+
+// // tabel row click and load 
 
 document.querySelector('#CustomerManage .tableRow').addEventListener('click', function(event) {
     let target = event.target;
@@ -395,6 +408,7 @@ document.querySelector('#CustomerManage .tableRow').addEventListener('click', fu
 
 
 );
+
 
 
 
