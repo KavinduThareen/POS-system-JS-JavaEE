@@ -1,3 +1,8 @@
+
+
+
+//save customer
+
 document.addEventListener('DOMContentLoaded', function() {
     refresh();
 });
@@ -6,7 +11,14 @@ document.querySelector('#CustomerManage #customerForm').addEventListener('submit
     event.preventDefault();
 });
 
+
+document.querySelector('#CustomerManage .updateBtn').addEventListener('click', function() {
+    updateCustomer();
+});
+
 document.querySelector('#CustomerManage .saveBtn').addEventListener('click', function() {
+
+    
     let custId = document.querySelector('#CustomerManage .custId').value;
     let custName = document.querySelector('#CustomerManage .custName').value;
     let custAddress = document.querySelector('#CustomerManage .custAddress').value;
@@ -36,6 +48,7 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
                     console.error("Response text:", http.responseText);
                 }
                 refresh();
+                fetchAndUpdateTable();
             } else {
                 console.error("Failed to save customer");
                 console.error("Status:", http.status);
@@ -46,6 +59,7 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
     http.open("POST", "http://localhost:8080/pos_system_backend_war_exploded/customer", true);
     http.setRequestHeader("Content-Type", "application/json");
     http.send(customerJSON);
+  
 });
 
 
@@ -108,76 +122,7 @@ function refresh() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     const url = 'http://localhost:8080/pos_system_backend_war_exploded/customer';
-//     const tableBody = document.querySelector('.tableRow');
-
-//     if (!tableBody) {
-//         console.error('Table body element not found');
-//         return;
-//     }
-
-//     fetch(url)
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Network response was not ok');
-//             }
-//             return response.json();
-//         })
-//         .then(data => {
-//             console.log('Customer Data:', data);
-
-//             tableBody.innerHTML = ''; // Clear existing rows
-
-//             data.forEach(customer => {
-//                 const row = document.createElement('tr');
-                
-//                 const idCell = document.createElement('td');
-//                 idCell.textContent = customer.id;
-//                 row.appendChild(idCell);
-
-//                 const nameCell = document.createElement('td');
-//                 nameCell.textContent = customer.name;
-//                 row.appendChild(nameCell);
-
-//                 const addressCell = document.createElement('td');
-//                 addressCell.textContent = customer.address;
-//                 row.appendChild(addressCell);
-
-//                 const salaryCell = document.createElement('td');
-//                 salaryCell.textContent = customer.salory;
-//                 row.appendChild(salaryCell);
-
-//                 tableBody.appendChild(row);
-//             });
-//         })
-//         .catch(error => {
-//             console.error('There was a problem with the fetch operation:', error);
-//         });
-// });
-
-
-
+// load table
 
 document.addEventListener('DOMContentLoaded', () => {
     const url = 'http://localhost:8080/pos_system_backend_war_exploded/customer';
@@ -241,16 +186,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+//update code
 
+// Update customer functionality
+function updateCustomer() {
+    let custId = document.querySelector('#CustomerManage .custId').value;
+    let custName = document.querySelector('#CustomerManage .custName').value;
+    let custAddress = document.querySelector('#CustomerManage .custAddress').value;
+    let custSalary = document.querySelector('#CustomerManage .custSalary').value;
 
+    // Validate input before sending (you can implement more validation if needed)
+    if (!custId) {
+        alert('Customer ID is required for update');
+        return;
+    }
 
+    let customer = {
+        id: custId,
+        name: custName,
+        address: custAddress,
+        salory: custSalary // Ensure this matches the DTO field
+    };
 
+    const customerJSON = JSON.stringify(customer);
+    console.log("Sending data:", customerJSON);
 
+    const http = new XMLHttpRequest();
+    http.onreadystatechange = () => {
+        if (http.readyState == 4) {
+            console.log("Response text:", http.responseText); // Add this line for debugging
+            if (http.status == 200) {
+                try {
+                    var responseJSON = JSON.parse(http.responseText);
+                    console.log("Response from server:", responseJSON);
+                    alert(responseJSON.message);
+                } catch (e) {
+                    console.error("Failed to parse JSON response:", e);
+                    console.error("Response text:", http.responseText);
+                }
+                refresh(); // Clear form fields after successful update
+                fetchAndUpdateTable(); // Refresh the table to reflect changes
+            } else {
+                console.error("Failed to update customer");
+                console.error("Status:", http.status);
+                console.error("Response:", http.responseText);
+            }
+        }
+    };
+    http.open("PUT", "http://localhost:8080/pos_system_backend_war_exploded/customer", true);
+    http.setRequestHeader("Content-Type", "application/json");
+    http.send(customerJSON);
+}
 
-
-
-
-
+// Adding event listener to the update button
+document.querySelector('#CustomerManage .updateBtn').addEventListener('click', function() {
+    updateCustomer();
+});
 
 
 
@@ -387,20 +378,23 @@ document.addEventListener('DOMContentLoaded', () => {
 //     }
 // });
 
-// document.querySelector('#CustomerManage .tableRow').addEventListener('click', function(event) {
-//     let target = event.target;
-//     if (target.tagName === 'TD') {
-//         let row = target.parentNode;
-//         let id = row.children[0].textContent;
-//         let name = row.children[1].textContent;
-//         let address = row.children[2].textContent;
-//         let salary = row.children[3].textContent;
-//         document.querySelector('#CustomerManage .custId').value = id;
-//         document.querySelector('#CustomerManage .custName').value = name;
-//         document.querySelector('#CustomerManage .custAddress').value = address;
-//         document.querySelector('#CustomerManage .custSalary').value = salary;
-//     }
-// }
+document.querySelector('#CustomerManage .tableRow').addEventListener('click', function(event) {
+    let target = event.target;
+    if (target.tagName === 'TD') {
+        let row = target.parentNode;
+        let id = row.children[0].textContent;
+        let name = row.children[1].textContent;
+        let address = row.children[2].textContent;
+        let salary = row.children[3].textContent;
+        document.querySelector('#CustomerManage .custId').value = id;
+        document.querySelector('#CustomerManage .custName').value = name;
+        document.querySelector('#CustomerManage .custAddress').value = address;
+        document.querySelector('#CustomerManage .custSalary').value = salary;
+    }
+}
 
 
-// );
+);
+
+
+
