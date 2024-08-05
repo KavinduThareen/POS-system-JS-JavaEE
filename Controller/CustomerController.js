@@ -354,7 +354,11 @@ document.querySelector('#CustomerManage .cleatBtn').addEventListener('click', fu
 // }
 
 
-//Delete
+
+
+
+
+// exampel delet 
 
 document.querySelector('#CustomerManage .removeBtn').addEventListener('click', async function() {
     let customerId = document.querySelector('#CustomerManage .custId').value;
@@ -365,13 +369,17 @@ document.querySelector('#CustomerManage .removeBtn').addEventListener('click', a
     }
 
     try {
-        let response = await fetch(`http://localhost:8080/pos_system_backend_war_exploded/customer?id=${customerId}`, {
+        let response = await fetch(`http://localhost:8080/pos_system_backend_war_exploded/customer?cusId=${customerId}`, {
             method: 'DELETE',
         });
 
         if (response.ok) {
-            let result = await response.json();
-            alert(result.message);
+            if (response.status !== 204) { // Check if the response has content
+                let result = await response.json();
+                alert(result.message);
+            } else {
+                alert("Customer deleted successfully");
+            }
             refresh(); // Assuming refresh() is a function to reload the customer list
         } else {
             let error = await response.json();
@@ -382,6 +390,65 @@ document.querySelector('#CustomerManage .removeBtn').addEventListener('click', a
         alert('An error occurred while deleting the customer.');
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// not layed Corect Delete
+
+// document.querySelector('#CustomerManage .removeBtn').addEventListener('click', async function() {
+//     let customerId = document.querySelector('#CustomerManage .custId').value;
+
+//     if (!customerId) {
+//         alert('Please enter a customer ID');
+//         return;
+//     }
+
+//     try {
+//         let response = await fetch(`http://localhost:8080/pos_system_backend_war_exploded/customer?id=${customerId}`, {
+//             method: 'DELETE',
+//         });
+
+//         if (response.ok) {
+//             let result = await response.json();
+//             alert(result.message);
+//             refresh(); // Assuming refresh() is a function to reload the customer list
+//         } else {
+//             let error = await response.json();
+//             alert(error.message);
+//         }
+//     } catch (error) {
+//         console.error('Error:', error);
+//         alert('An error occurred while deleting the customer.');
+//     }
+// });
 
 
 
