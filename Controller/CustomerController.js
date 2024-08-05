@@ -122,7 +122,13 @@ function refresh() {
 
 
 
-// load table
+
+
+
+
+
+
+//correct but not support layed  load table
 
 document.addEventListener('DOMContentLoaded', () => {
     const url = 'http://localhost:8080/pos_system_backend_war_exploded/customer';
@@ -186,16 +192,79 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-//update code
+//Correct update code
 
 // Update customer functionality
+// function updateCustomer() {
+//     let custId = document.querySelector('#CustomerManage .custId').value;
+//     let custName = document.querySelector('#CustomerManage .custName').value;
+//     let custAddress = document.querySelector('#CustomerManage .custAddress').value;
+//     let custSalary = document.querySelector('#CustomerManage .custSalary').value;
+
+//     // Validate input before sending (you can implement more validation if needed)
+//     if (!custId) {
+//         alert('Customer ID is required for update');
+//         return;
+//     }
+
+//     let customer = {
+//         id: custId,
+//         name: custName,
+//         address: custAddress,
+//         salory: custSalary // Ensure this matches the DTO field
+//     };
+
+//     const customerJSON = JSON.stringify(customer);
+//     console.log("Sending data:", customerJSON);
+
+//     const http = new XMLHttpRequest();
+//     http.onreadystatechange = () => {
+//         if (http.readyState == 4) {
+//             console.log("Response text:", http.responseText); // Add this line for debugging
+//             if (http.status == 200) {
+//                 try {
+//                     var responseJSON = JSON.parse(http.responseText);
+//                     console.log("Response from server:", responseJSON);
+//                     alert(responseJSON.message);
+//                 } catch (e) {
+//                     console.error("Failed to parse JSON response:", e);
+//                     console.error("Response text:", http.responseText);
+//                 }
+//                 refresh(); // Clear form fields after successful update
+//                 fetchAndUpdateTable(); // Refresh the table to reflect changes
+//             } else {
+//                 console.error("Failed to update customer");
+//                 console.error("Status:", http.status);
+//                 console.error("Response:", http.responseText);
+//             }
+//         }
+//     };
+//     http.open("PUT", "http://localhost:8080/pos_system_backend_war_exploded/customer", true);
+//     http.setRequestHeader("Content-Type", "application/json");
+//     http.send(customerJSON);
+// }
+
+// // Adding event listener to the update button
+// document.querySelector('#CustomerManage .updateBtn').addEventListener('click', function() {
+//     updateCustomer();
+// });
+
+
+
+
+
+
+
+
+// exampel update code 
+
 function updateCustomer() {
     let custId = document.querySelector('#CustomerManage .custId').value;
     let custName = document.querySelector('#CustomerManage .custName').value;
     let custAddress = document.querySelector('#CustomerManage .custAddress').value;
     let custSalary = document.querySelector('#CustomerManage .custSalary').value;
 
-    // Validate input before sending (you can implement more validation if needed)
+    // Validate input before sending
     if (!custId) {
         alert('Customer ID is required for update');
         return;
@@ -211,47 +280,46 @@ function updateCustomer() {
     const customerJSON = JSON.stringify(customer);
     console.log("Sending data:", customerJSON);
 
-    const http = new XMLHttpRequest();
-    http.onreadystatechange = () => {
-        if (http.readyState == 4) {
-            console.log("Response text:", http.responseText); // Add this line for debugging
-            if (http.status == 200) {
-                try {
-                    var responseJSON = JSON.parse(http.responseText);
-                    console.log("Response from server:", responseJSON);
-                    alert(responseJSON.message);
-                } catch (e) {
-                    console.error("Failed to parse JSON response:", e);
-                    console.error("Response text:", http.responseText);
-                }
-                refresh(); // Clear form fields after successful update
-                fetchAndUpdateTable(); // Refresh the table to reflect changes
-            } else {
-                console.error("Failed to update customer");
-                console.error("Status:", http.status);
-                console.error("Response:", http.responseText);
+    fetch(`http://localhost:8080/pos_system_backend_war_exploded/customer?id=${custId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: customerJSON,
+    })
+    .then(response => {
+        if (response.ok) {
+            // Check if response body is empty
+            if (response.status === 204) {
+                return { message: 'Customer updated successfully' };
             }
+            // If response body is not empty, parse JSON
+            return response.json();
+        } else {
+            throw new Error('Network response was not ok');
         }
-    };
-    http.open("PUT", "http://localhost:8080/pos_system_backend_war_exploded/customer", true);
-    http.setRequestHeader("Content-Type", "application/json");
-    http.send(customerJSON);
+    })
+    .then(data => {
+        // Data might be an object with a message or simply a success message
+        console.log("Response from server:", data);
+        if (data && data.message) {
+            alert(data.message);
+        } else {
+            alert('Customer updated successfully');
+        }
+        refresh(); // Clear form fields after successful update
+        fetchAndUpdateTable(); // Refresh the table to reflect changes
+    })
+    .catch(error => {
+        // console.error('Error:', error);
+        // alert('An error occurred while updating the customer.');
+    });
 }
 
 // Adding event listener to the update button
 document.querySelector('#CustomerManage .updateBtn').addEventListener('click', function() {
     updateCustomer();
 });
-
-
-
-
-
-
-
-
-
-
 
 
 
