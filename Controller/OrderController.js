@@ -1,3 +1,83 @@
+
+
+//customer card load deta
+
+
+// document.addEventListener('DOMContentLoaded', function () {
+//     refresh();
+// });
+
+// document.querySelector('.orderManageBtn').addEventListener('click', function () {
+//     refresh();
+// });
+
+// function refresh() {
+
+//     document.querySelector('#OrderManage .orderDate').value = new Date().toISOString().split('T')[0];
+//     loadCustomer();
+
+// }
+
+
+                                         
+
+
+
+
+
+
+
+// function loadCustomer() {
+//     let cmb = document.querySelector('#OrderManage .customers');
+//     cmb.innerHTML = '';
+
+//     fetch('http://localhost:8080/pos_system_backend_war_exploded/order')
+//         .then(response => response.json())
+//         .then(customers => {
+//             let defaultOption = document.createElement('option');
+//             defaultOption.value = '';
+//             defaultOption.text = 'Select Customer';
+//             cmb.appendChild(defaultOption);
+
+//             customers.forEach(customer => {
+//                 let option = document.createElement('option');
+//                 option.value = customer.id;
+//                 option.text = customer.id;
+//                 cmb.appendChild(option);
+//             });
+//         })
+//         .catch(error => console.error('Error loading customers:', error));
+// }
+
+// document.querySelector('#OrderManage .customers').addEventListener('change', function () {
+//     let customerId = this.value;
+
+//     fetch('http://localhost:8080/pos_system_backend_war_exploded/order')
+//         .then(response => response.json())
+//         .then(customers => {
+//             let customer = customers.find(c => c.id === customerId);
+//             if (customer) {
+//                 document.querySelector('#OrderManage .custId').value = customer.id;
+//                 document.querySelector('#OrderManage .custName').value = customer.name;
+//                 document.querySelector('#OrderManage .custAddress').value = customer.address;
+//                 document.querySelector('#OrderManage .custSalary').value = customer.salory;
+//             }
+//         })
+//         .catch(error => console.error('Error loading customer details:', error));
+// });
+
+
+
+
+
+
+
+
+
+
+// exampel
+
+
 document.addEventListener('DOMContentLoaded', function () {
     refresh();
 });
@@ -11,8 +91,7 @@ function refresh() {
     // document.querySelector('#OrderManage .orderId').value = generateId();
     document.querySelector('#OrderManage .orderDate').value = new Date().toISOString().split('T')[0];
     loadCustomer();
-    // Uncomment if you have loadItems function to load items
-    // loadItems();
+    loadItems(); // Load items as well
 }
 
 function extractNumber(id) {
@@ -22,7 +101,6 @@ function extractNumber(id) {
     }
     return null;
 }
-
 
 // function generateId() {
 //     let orders = getAllOrders();
@@ -40,7 +118,7 @@ function loadCustomer() {
     let cmb = document.querySelector('#OrderManage .customers');
     cmb.innerHTML = '';
 
-    fetch('http://localhost:8080/pos_system_backend_war_exploded/order')
+    fetch('http://localhost:8080/pos_system_backend_war_exploded/order?type=customer')
         .then(response => response.json())
         .then(customers => {
             let defaultOption = document.createElement('option');
@@ -51,17 +129,39 @@ function loadCustomer() {
             customers.forEach(customer => {
                 let option = document.createElement('option');
                 option.value = customer.id;
-                option.text = customer.id;
+                option.text = customer.name;
                 cmb.appendChild(option);
             });
         })
         .catch(error => console.error('Error loading customers:', error));
 }
 
+function loadItems() {
+    let cmb = document.querySelector('#OrderManage .itemCmb');
+    cmb.innerHTML = '';
+
+    fetch('http://localhost:8080/pos_system_backend_war_exploded/order?type=item')
+        .then(response => response.json())
+        .then(items => {
+            let defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.text = 'Select Item';
+            cmb.appendChild(defaultOption);
+
+            items.forEach(item => {
+                let option = document.createElement('option');
+                option.value = item.code;
+                option.text = item.name;
+                cmb.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error loading items:', error));
+}
+
 document.querySelector('#OrderManage .customers').addEventListener('change', function () {
     let customerId = this.value;
 
-    fetch('http://localhost:8080/pos_system_backend_war_exploded/order')
+    fetch('http://localhost:8080/pos_system_backend_war_exploded/order?type=customer')
         .then(response => response.json())
         .then(customers => {
             let customer = customers.find(c => c.id === customerId);
@@ -74,6 +174,38 @@ document.querySelector('#OrderManage .customers').addEventListener('change', fun
         })
         .catch(error => console.error('Error loading customer details:', error));
 });
+
+document.querySelector('#OrderManage .itemCmb').addEventListener('change', function () {
+    let itemCode = this.value;
+
+    fetch('http://localhost:8080/pos_system_backend_war_exploded/order?type=item')
+        .then(response => response.json())
+        .then(items => {
+            let item = items.find(i => i.code === itemCode);
+            if (item) {
+                document.querySelector('#OrderManage .itemCode').value = item.code;
+                document.querySelector('#OrderManage .itemName').value = item.name;
+                document.querySelector('#OrderManage .itemPrice').value = item.price;
+                document.querySelector('#OrderManage .itemQty').value = item.qty;
+            }
+        })
+        .catch(error => console.error('Error loading item details:', error));
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
