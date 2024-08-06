@@ -63,6 +63,12 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
 });
 
 
+
+
+
+
+
+
 //Define the refresh function
 
 function refresh() {
@@ -349,6 +355,8 @@ document.querySelector('#CustomerManage .updateBtn').addEventListener('click', f
 //     }
 //     return null;
 // }
+
+
 
 // function createCustomerId() {
 //     let customers = getAllCustomers();
