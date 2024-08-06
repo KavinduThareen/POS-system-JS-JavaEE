@@ -37,7 +37,7 @@ document.querySelector('#ItemManage .saveBtn').addEventListener('click', functio
     const http = new XMLHttpRequest();
     http.onreadystatechange = () => {
         if (http.readyState == 4) {
-            console.log("Response text:", http.responseText); // Add this line for debugging
+            console.log("Response text:", http.responseText); 
             if (http.status == 201) {
                 try {
                     var responseJSON = JSON.parse(http.responseText);
@@ -243,7 +243,7 @@ function updateItem() {
             // alert('Item updated successfully');
         }
         refresh(); // Clear form fields after successful update
-        fetchAndUpdateTable(); // Refresh the table to reflect changes
+        fetchAndUpdateTable(); 
     })
     .catch(error => {
         // console.error('Error:', error);
@@ -251,9 +251,9 @@ function updateItem() {
     });
 }
 
-// Adding event listener to the update button
+
 document.querySelector('#ItemManage .updateBtn').addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault(); 
     updateItem();
 });
 
@@ -272,6 +272,38 @@ document.querySelector('#ItemManage .updateBtn').addEventListener('click', funct
 
 
 
+// item delet 
+
+document.querySelector('#ItemManage .deleteBtn').addEventListener('click', async function() {
+    let itemCode = document.querySelector('#ItemManage .itemId').value;
+
+    if (!itemCode) {
+        alert('Please enter a item code');
+        return;
+    }
+
+    try {
+        let response = await fetch(`http://localhost:8080/pos_system_backend_war_exploded/item?code=${itemCode}`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            if (response.status !== 204) { 
+                let result = await response.json();
+                alert(result.message);
+            } else {
+                alert("item deleted successfully");
+            }
+            refresh(); 
+        } else {
+            let error = await response.json();
+            alert(error.message);
+        }
+    } catch (error) {
+        // console.error('Error:', error);
+        // alert('An error occurred while deleting the customer.');
+    }
+});
 
 
 
@@ -318,11 +350,13 @@ document.querySelector('#ItemManage .updateBtn').addEventListener('click', funct
 // }
 
 function refresh() {
-    document.querySelector('#ItemManage .itemId').value = generateId();
+    console.log("Refresh function called");
+
+    document.querySelector('#ItemManage .itemId').value = '';
     document.querySelector('#ItemManage .itemName').value = '';
     document.querySelector('#ItemManage .itemQty').value = '';
     document.querySelector('#ItemManage .itemPrice').value = '';
-    loadTable();
+    // loadTable();
 }
 
 
@@ -447,6 +481,10 @@ document.querySelector('#ItemManage .deleteBtn').addEventListener('click', funct
 document.querySelector('#ItemManage .clearBtn').addEventListener('click', function() {
     refresh();
 });
+
+
+
+
 
 document.querySelector('#ItemManage .searchBtn').addEventListener('click', function() {
     let id = document.querySelector('#ItemManage .itemId').value;

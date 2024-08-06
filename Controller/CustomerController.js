@@ -280,7 +280,7 @@ function updateCustomer() {
         id: custId,
         name: custName,
         address: custAddress,
-        salory: custSalary // Ensure this matches the DTO field
+        salory: custSalary 
     };
 
     const customerJSON = JSON.stringify(customer);
