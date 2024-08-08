@@ -1,5 +1,11 @@
 
 
+
+
+// customer, and item card load deta
+
+
+
 // document.addEventListener('DOMContentLoaded', function () {
 //     refresh();
 // });
@@ -9,21 +15,27 @@
 // });
 
 // function refresh() {
-   
 //     document.querySelector('#OrderManage .orderDate').value = new Date().toISOString().split('T')[0];
+//     generateOrderId();
 //     loadCustomer();
-//     loadItems(); 
+//     loadItems();
 // }
 
-// function extractNumber(id) {
-//     var match = id.match(/OD(\d+)/);
-//     if (match && match.length > 1) {
-//         return match[1];
-//     }
-//     return null;
+// function generateOrderId() {
+//     fetch('http://localhost:8080/pos_system_backend_war_exploded/order?type=lastOrderId')
+//         .then(response => response.json())
+//         .then(data => {
+//             let lastOrderId = data.lastOrderId || 'O000';
+//             let newOrderId = incrementOrderId(lastOrderId);
+//             document.querySelector('#OrderManage .orderId').value = newOrderId;
+//         })
+//         .catch(error => console.error('Error generating order ID:', error));
 // }
 
-
+// function incrementOrderId(lastOrderId) {
+//     let numericPart = parseInt(lastOrderId.slice(1)) + 1;
+//     return 'O' + numericPart.toString().padStart(3, '0');
+// }
 
 // function loadCustomer() {
 //     let cmb = document.querySelector('#OrderManage .customers');
@@ -114,7 +126,7 @@
 
 
 
-// customer, and item card load deta
+
 
 
 
@@ -125,6 +137,8 @@ document.addEventListener('DOMContentLoaded', function () {
 document.querySelector('.orderManageBtn').addEventListener('click', function () {
     refresh();
 });
+
+let getItems = [];
 
 function refresh() {
     document.querySelector('#OrderManage .orderDate').value = new Date().toISOString().split('T')[0];
@@ -226,6 +240,98 @@ document.querySelector('#OrderManage .itemCmb').addEventListener('change', funct
         })
         .catch(error => console.error('Error loading item details:', error));
 });
+
+document.querySelector('#OrderManage .addBtn').addEventListener('click', function () {
+    let itemCode = document.querySelector('#OrderManage .itemCode').value;
+    let itemName = document.querySelector('#OrderManage .itemName').value;
+    let itemPrice = parseFloat(document.querySelector('#OrderManage .itemPrice').value);
+    let orderQty = parseInt(document.querySelector('#OrderManage .orderQty').value);
+
+    if (itemCode && itemName && itemPrice && orderQty > 0) {
+        let total = itemPrice * orderQty;
+
+        let getItem = {
+            itemCode: itemCode,
+            itemName: itemName,
+            itemPrice: itemPrice,
+            orderQty: orderQty,
+            total: total
+        };
+
+        getItems.push(getItem);
+        clearInputFields();
+        loadTable();
+        
+    } else {
+        alert('Please select an item and enter a valid quantity.');
+    }
+});
+
+function loadTable() {
+    let tableRows = document.querySelector('.mainTable .tableRows');
+    tableRows.innerHTML = '';
+
+    getItems.forEach(item => {
+        let row = `
+            <div>
+                <div>${item.itemCode}</div>
+                <div>${item.itemName}</div>
+                <div>${item.itemPrice.toFixed(2)}</div>
+                <div>${item.orderQty}</div>
+                <div>${item.total.toFixed(2)}</div>
+            </div>
+        `;
+        tableRows.innerHTML += row;
+    });
+
+    setTotal();
+}
+
+function setTotal() {
+    let total = getItems.reduce((sum, item) => sum + item.total, 0);
+    document.querySelector('#OrderManage .Total').textContent = total.toFixed(2);
+}
+
+
+
+
+
+
+
+
+
+
+
+function clearInputFields() {
+    document.querySelector('#OrderManage .itemCmb').value = '';
+    document.querySelector('#OrderManage .itemCode').value = '';
+    document.querySelector('#OrderManage .itemName').value = '';
+    document.querySelector('#OrderManage .itemPrice').value = '';
+    document.querySelector('#OrderManage .itemQty').value = '';
+    document.querySelector('#OrderManage .orderQty').value = '';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
