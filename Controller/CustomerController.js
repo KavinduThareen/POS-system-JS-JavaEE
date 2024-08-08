@@ -155,12 +155,12 @@
 let lastCustomerId = parseInt(localStorage.getItem('lastCustomerId')) || 0;
 
 document.addEventListener('DOMContentLoaded', function() {
-    refresh();
-    generateCustomerId(); // Generate and display ID on page load
+    
+    generateCustomerId();
 });
 
 document.querySelector('#CustomerManage #customerForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault();
 });
 
 document.querySelector('#CustomerManage .updateBtn').addEventListener('click', function() {
@@ -168,7 +168,7 @@ document.querySelector('#CustomerManage .updateBtn').addEventListener('click', f
 });
 
 document.querySelector('#CustomerManage .saveBtn').addEventListener('click', function() {
-    // Generate the new customer ID and update the text field
+    
     generateCustomerId();
 
     let custId = document.querySelector('#CustomerManage .custId').value;
@@ -180,7 +180,7 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
         id: custId,
         name: custName,
         address: custAddress,
-        salory: custSalary // Ensure this matches the DTO field
+        salory: custSalary 
     };
 
     const customerJSON = JSON.stringify(customer);
@@ -189,7 +189,7 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
     const http = new XMLHttpRequest();
     http.onreadystatechange = () => {
         if (http.readyState == 4) {
-            console.log("Response text:", http.responseText); // Debugging line
+            console.log("Response text:", http.responseText); 
             if (http.status == 201) {
                 try {
                     var responseJSON = JSON.parse(http.responseText);
@@ -201,9 +201,7 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
                 }
                
                 refresh();
-                // generateCustomerId();
-                fetchAndUpdateTable();
-            
+         
             } else {
                 console.error("Failed to save customer");
                 console.error("Status:", http.status);
@@ -217,16 +215,14 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
     http.send(customerJSON);
 });
 
-// Function to generate a sequential customer ID
+
 function generateCustomerId() {
     let customerIdField = document.querySelector('#CustomerManage .custId');
-    lastCustomerId++; // Increment the last used ID
-    let newId = 'C' + String(lastCustomerId).padStart(3, '0'); // Format ID with leading zeros
-    customerIdField.value = newId; // Update the text field with the new ID
-
-    // Store the new last used ID in localStorage
-    localStorage.setItem('lastCustomerId', lastCustomerId);
+    let randomId = Math.floor(100 + Math.random() * 900);
+    let newId = 'C-' + randomId;
+    customerIdField.value = newId;
 }
+
 
 
 
@@ -273,7 +269,7 @@ function generateCustomerId() {
 function refresh() {
     console.log("Refresh function called");
  
-    document.querySelector('#CustomerManage .custId').value = '';
+    // document.querySelector('#CustomerManage .custId').value = '';
     document.querySelector('#CustomerManage .custName').value = '';
     document.querySelector('#CustomerManage .custAddress').value = '';
     document.querySelector('#CustomerManage .custSalary').value = '';

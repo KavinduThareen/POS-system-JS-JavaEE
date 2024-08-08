@@ -1,15 +1,240 @@
 
 
+
+
+
+// let lastCustomerId = parseInt(localStorage.getItem('itemID')) || 0;
+
+
+
+
+
+
+// document.querySelector('#ItemManage #ItemForm').addEventListener('submit', function(event) {
+//     event.preventDefault();
+// });
+
+// document.querySelector('#ItemManage .updateBtn').addEventListener('click', function() {
+//     updateItem();
+   
+// });
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     refresh();
+//     generateCustomerId();
+// });
+
+// let itemCode;
+// let itemName;
+// let itemQty;
+// let itemPrice;
+
+// document.querySelector('#ItemManage .saveBtn').addEventListener('click', function() {
+
+//     generateCustomerId();
+
+//     itemCode = document.querySelector('#ItemManage .itemId').value;
+//     itemName = document.querySelector('#ItemManage .itemName').value;
+//     itemQty = document.querySelector('#ItemManage .itemQty').value;
+//     itemPrice = document.querySelector('#ItemManage .itemPrice').value;
+
+//     let item = {
+//         code: itemCode,
+//         name: itemName,
+//         qty: itemQty,
+//         price: itemPrice
+//     }
+
+ 
+//     const itemJSON = JSON.stringify(item);
+//     console.log("Sending data:", itemJSON);
+
+//     const http = new XMLHttpRequest();
+//     http.onreadystatechange = () => {
+//         if (http.readyState == 4) {
+//             console.log("Response text:", http.responseText); 
+//             if (http.status == 201) {
+//                 try {
+//                     var responseJSON = JSON.parse(http.responseText);
+//                     console.log("Response from server:", responseJSON);
+//                     alert(responseJSON.message);
+//                 } catch (e) {
+//                     console.error("Failed to parse JSON response:", e);
+//                     console.error("Response text:", http.responseText);
+//                 }
+//                 refresh();
+//                 fetchAndUpdateTable();
+//             } else {
+//                 console.error("Failed to save customer");
+//                 console.error("Status:", http.status);
+//                 console.error("Response:", http.responseText);
+//             }
+//         }
+//     };
+//     http.open("POST", "http://localhost:8080/pos_system_backend_war_exploded/item", true);
+//     http.setRequestHeader("Content-Type", "application/json");
+//     http.send(itemJSON);
+
+    
+
+
+// });
+
+
+
+
+
+
+
+// function generateCustomerId() {
+//     let customerIdField = document.querySelector('#ItemManage .itemId');
+//     itemID++; 
+//     let newId = 'I' + String(itemID).padStart(3, '0'); 
+//     customerIdField.value = newId;
+
+//     localStorage.setItem('itemID', itemID);
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// let currentItemCode = 1; 
+
+// function generateItemId() {
+//     let nextItemCode = "I" + currentItemCode.toString().padStart(3, '0'); 
+//     document.querySelector('#ItemManage .itemId').value = nextItemCode;
+//     currentItemCode++;
+//     return nextItemCode;
+// }
+
+
+
+// let lastitemId = parseInt(localStorage.getItem('itemID')) || 0;
+
+// document.querySelector('#ItemManage #ItemForm').addEventListener('submit', function(event) {
+//     event.preventDefault();
+// });
+
+// document.querySelector('#ItemManage .updateBtn').addEventListener('click', function() {
+//     updateItem();
+// });
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     refresh();
+//     generateItemId();  
+// });
+
+// let itemCode;
+// let itemName;
+// let itemQty;
+// let itemPrice;
+
+// document.querySelector('#ItemManage .saveBtn').addEventListener('click', function() {
+    
+//     itemCode = generateItemId();
+//     itemName = document.querySelector('#ItemManage .itemName').value;
+//     itemQty = document.querySelector('#ItemManage .itemQty').value;
+//     itemPrice = document.querySelector('#ItemManage .itemPrice').value;
+
+//     let item = {
+//         code: itemCode,
+//         name: itemName,
+//         qty: itemQty,
+//         price: itemPrice
+//     };
+
+//     const itemJSON = JSON.stringify(item);
+//     console.log("Sending data:", itemJSON);
+
+//     const http = new XMLHttpRequest();
+//     http.onreadystatechange = () => {
+//         if (http.readyState == 4) {
+//             console.log("Response text:", http.responseText); 
+//             if (http.status == 201) {
+//                 try {
+//                     var responseJSON = JSON.parse(http.responseText);
+//                     console.log("Response from server:", responseJSON);
+//                     alert(responseJSON.message);
+//                 } catch (e) {
+//                     console.error("Failed to parse JSON response:", e);
+//                     console.error("Response text:", http.responseText);
+//                 }
+//                 refresh();
+//                 fetchAndUpdateTable();
+//             } else {
+//                 console.error("Failed to save item");
+//                 console.error("Status:", http.status);
+//                 console.error("Response:", http.responseText);
+//             }
+//         }
+//     };
+//     http.open("POST", "http://localhost:8080/pos_system_backend_war_exploded/item", true);
+//     http.setRequestHeader("Content-Type", "application/json");
+//     http.send(itemJSON);
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let currentItemCode = parseInt(localStorage.getItem('itemID')) || 1; 
+
+function generateItemId() {
+    let itemIdField = document.querySelector('#ItemManage .itemId');
+ 
+    let randomId = Math.floor(100 + Math.random() * 900);
+   
+    let nextItemCode = 'I-' + randomId;
+   
+    itemIdField.value = nextItemCode;
+  
+    localStorage.setItem('itemID', randomId);
+    
+    return nextItemCode;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+ 
+    generateItemId();  
+});
+
 document.querySelector('#ItemManage #ItemForm').addEventListener('submit', function(event) {
     event.preventDefault();
+   
 });
 
 document.querySelector('#ItemManage .updateBtn').addEventListener('click', function() {
     updateItem();
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    refresh();
 });
 
 let itemCode;
@@ -18,7 +243,7 @@ let itemQty;
 let itemPrice;
 
 document.querySelector('#ItemManage .saveBtn').addEventListener('click', function() {
-    itemCode = document.querySelector('#ItemManage .itemId').value;
+    itemCode = generateItemId();
     itemName = document.querySelector('#ItemManage .itemName').value;
     itemQty = document.querySelector('#ItemManage .itemQty').value;
     itemPrice = document.querySelector('#ItemManage .itemPrice').value;
@@ -28,9 +253,8 @@ document.querySelector('#ItemManage .saveBtn').addEventListener('click', functio
         name: itemName,
         qty: itemQty,
         price: itemPrice
-    }
+    };
 
- 
     const itemJSON = JSON.stringify(item);
     console.log("Sending data:", itemJSON);
 
@@ -40,7 +264,7 @@ document.querySelector('#ItemManage .saveBtn').addEventListener('click', functio
             console.log("Response text:", http.responseText); 
             if (http.status == 201) {
                 try {
-                    var responseJSON = JSON.parse(http.responseText);
+                    let responseJSON = JSON.parse(http.responseText);
                     console.log("Response from server:", responseJSON);
                     alert(responseJSON.message);
                 } catch (e) {
@@ -48,9 +272,9 @@ document.querySelector('#ItemManage .saveBtn').addEventListener('click', functio
                     console.error("Response text:", http.responseText);
                 }
                 refresh();
-                fetchAndUpdateTable();
+                
             } else {
-                console.error("Failed to save customer");
+                console.error("Failed to save item");
                 console.error("Status:", http.status);
                 console.error("Response:", http.responseText);
             }
@@ -59,10 +283,6 @@ document.querySelector('#ItemManage .saveBtn').addEventListener('click', functio
     http.open("POST", "http://localhost:8080/pos_system_backend_war_exploded/item", true);
     http.setRequestHeader("Content-Type", "application/json");
     http.send(itemJSON);
-
-    
-
-
 });
 
 
@@ -74,6 +294,97 @@ document.querySelector('#ItemManage .saveBtn').addEventListener('click', functio
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// let currentItemCode = 1; 
+
+// function generateItemId() {
+//     let nextItemCode = "I" + currentItemCode.toString().padStart(3, '0'); 
+//     document.querySelector('#ItemManage .itemId').value = nextItemCode;
+//     currentItemCode++;
+//     return nextItemCode;
+// }
+
+// document.querySelector('#ItemManage .saveBtn').addEventListener('click', function() {
+
+//     const itemCode = generateItemId();
+
+//     const itemName = document.querySelector('#ItemManage .itemName').value;
+//     const itemQty = document.querySelector('#ItemManage .itemQty').value;
+//     const itemPrice = document.querySelector('#ItemManage .itemPrice').value;
+
+//     let item = {
+//         code: itemCode,
+//         name: itemName,
+//         qty: itemQty,
+//         price: itemPrice
+//     }
+
+//     const itemJSON = JSON.stringify(item);
+//     console.log("Sending data:", itemJSON);
+
+//     const http = new XMLHttpRequest();
+//     http.onreadystatechange = () => {
+//         if (http.readyState == 4) {
+//             console.log("Response text:", http.responseText); 
+//             if (http.status == 201) {
+//                 try {
+//                     var responseJSON = JSON.parse(http.responseText);
+//                     console.log("Response from server:", responseJSON);
+//                     alert(responseJSON.message);
+//                 } catch (e) {
+//                     console.error("Failed to parse JSON response:", e);
+//                     console.error("Response text:", http.responseText);
+//                 }
+//                 refresh();
+//                 fetchAndUpdateTable();
+//             } else {
+//                 console.error("Failed to save item");
+//                 console.error("Status:", http.status);
+//                 console.error("Response:", http.responseText);
+//             }
+//         }
+//     };
+//     http.open("POST", "http://localhost:8080/pos_system_backend_war_exploded/item", true);
+//     http.setRequestHeader("Content-Type", "application/json");
+//     http.send(itemJSON);
+// });
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     refresh();
+//     generateItemId(); 
+// });
 
 
 
@@ -409,7 +720,7 @@ document.querySelector('#ItemManage .deleteBtn').addEventListener('click', async
 function refresh() {
     console.log("Refresh function called");
 
-    document.querySelector('#ItemManage .itemId').value = '';
+    // document.querySelector('#ItemManage .itemId').value = '';
     document.querySelector('#ItemManage .itemName').value = '';
     document.querySelector('#ItemManage .itemQty').value = '';
     document.querySelector('#ItemManage .itemPrice').value = '';

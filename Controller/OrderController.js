@@ -88,7 +88,7 @@ document.querySelector('#OrderManage .customers').addEventListener('change', fun
                 document.querySelector('#OrderManage .custId').value = customer.id;
                 document.querySelector('#OrderManage .custName').value = customer.name;
                 document.querySelector('#OrderManage .custAddress').value = customer.address;
-                document.querySelector('#OrderManage .custSalary').value = customer.salary;
+                document.querySelector('#OrderManage .custSalary').value = customer.salory;
             }
         })
         .catch(error => console.error('Error loading customer details:', error));
