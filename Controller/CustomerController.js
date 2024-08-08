@@ -3,22 +3,174 @@
 
 //save customer
 
+// document.addEventListener('DOMContentLoaded', function() {
+//     refresh();
+// });
+
+// document.querySelector('#CustomerManage #customerForm').addEventListener('submit', function(event) {
+//     event.preventDefault();
+// });
+
+
+// document.querySelector('#CustomerManage .updateBtn').addEventListener('click', function() {
+//     updateCustomer();
+// });
+
+// document.querySelector('#CustomerManage .saveBtn').addEventListener('click', function() {
+
+    
+//     let custId = document.querySelector('#CustomerManage .custId').value;
+//     let custName = document.querySelector('#CustomerManage .custName').value;
+//     let custAddress = document.querySelector('#CustomerManage .custAddress').value;
+//     let custSalary = document.querySelector('#CustomerManage .custSalary').value;
+
+//     let customer = {
+//         id: custId,
+//         name: custName,
+//         address: custAddress,
+//         salory: custSalary // Make sure this matches the DTO field
+//     };
+
+//     const customerJSON = JSON.stringify(customer);
+//     console.log("Sending data:", customerJSON);
+
+//     const http = new XMLHttpRequest();
+//     http.onreadystatechange = () => {
+//         if (http.readyState == 4) {
+//             console.log("Response text:", http.responseText); // Add this line for debugging
+//             if (http.status == 201) {
+//                 try {
+//                     var responseJSON = JSON.parse(http.responseText);
+//                     console.log("Response from server:", responseJSON);
+//                     alert(responseJSON.message);
+//                 } catch (e) {
+//                     console.error("Failed to parse JSON response:", e);
+//                     console.error("Response text:", http.responseText);
+//                 }
+//                 refresh();
+//                 fetchAndUpdateTable();
+//             } else {
+//                 console.error("Failed to save customer");
+//                 console.error("Status:", http.status);
+//                 console.error("Response:", http.responseText);
+//             }
+//         }
+//     };
+//     http.open("POST", "http://localhost:8080/pos_system_backend_war_exploded/customer", true);
+//     http.setRequestHeader("Content-Type", "application/json");
+//     http.send(customerJSON);
+  
+// });
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+// let lastCustomerId = parseInt(localStorage.getItem('lastCustomerId')) || 0;
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     refresh();
+//     generateCustomerId(); 
+// });
+
+// document.querySelector('#CustomerManage #customerForm').addEventListener('submit', function(event) {
+//     event.preventDefault(); 
+// });
+
+// document.querySelector('#CustomerManage .updateBtn').addEventListener('click', function() {
+//     updateCustomer();
+// });
+
+// document.querySelector('#CustomerManage .saveBtn').addEventListener('click', function() {
+//     let custId = document.querySelector('#CustomerManage .custId').value;
+//     let custName = document.querySelector('#CustomerManage .custName').value;
+//     let custAddress = document.querySelector('#CustomerManage .custAddress').value;
+//     let custSalary = document.querySelector('#CustomerManage .custSalary').value;
+
+//     let customer = {
+//         id: custId,
+//         name: custName,
+//         address: custAddress,
+//         salory: custSalary 
+//     };
+
+//     const customerJSON = JSON.stringify(customer);
+//     console.log("Sending data:", customerJSON);
+
+//     const http = new XMLHttpRequest();
+//     http.onreadystatechange = () => {
+//         if (http.readyState == 4) {
+//             console.log("Response text:", http.responseText); 
+//             if (http.status == 201) {
+//                 try {
+//                     var responseJSON = JSON.parse(http.responseText);
+//                     console.log("Response from server:", responseJSON);
+//                     alert(responseJSON.message);
+//                 } catch (e) {
+//                     console.error("Failed to parse JSON response:", e);
+//                     console.error("Response text:", http.responseText);
+//                 }
+//                 refresh();
+//                 fetchAndUpdateTable();
+//             } else {
+//                 console.error("Failed to save customer");
+//                 console.error("Status:", http.status);
+//                 console.error("Response:", http.responseText);
+//             }
+//         }
+//     };
+//     http.open("POST", "http://localhost:8080/pos_system_backend_war_exploded/customer", true);
+//     http.setRequestHeader("Content-Type", "application/json");
+//     http.send(customerJSON);
+// });
+
+
+// function generateCustomerId() {
+//     let customerIdField = document.querySelector('#CustomerManage .custId');
+//     lastCustomerId++; 
+//     let newId = 'C' + String(lastCustomerId).padStart(3, '0'); 
+//     customerIdField.value = newId;
+
+    
+//     localStorage.setItem('lastCustomerId', lastCustomerId);
+// }
+
+
+
+
+
+
+
+
+let lastCustomerId = parseInt(localStorage.getItem('lastCustomerId')) || 0;
+
 document.addEventListener('DOMContentLoaded', function() {
     refresh();
+    generateCustomerId(); // Generate and display ID on page load
 });
 
 document.querySelector('#CustomerManage #customerForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+    event.preventDefault(); // Prevent the default form submission
 });
-
 
 document.querySelector('#CustomerManage .updateBtn').addEventListener('click', function() {
     updateCustomer();
 });
 
 document.querySelector('#CustomerManage .saveBtn').addEventListener('click', function() {
+    // Generate the new customer ID and update the text field
+    generateCustomerId();
 
-    
     let custId = document.querySelector('#CustomerManage .custId').value;
     let custName = document.querySelector('#CustomerManage .custName').value;
     let custAddress = document.querySelector('#CustomerManage .custAddress').value;
@@ -28,7 +180,7 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
         id: custId,
         name: custName,
         address: custAddress,
-        salory: custSalary // Make sure this matches the DTO field
+        salory: custSalary // Ensure this matches the DTO field
     };
 
     const customerJSON = JSON.stringify(customer);
@@ -37,7 +189,7 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
     const http = new XMLHttpRequest();
     http.onreadystatechange = () => {
         if (http.readyState == 4) {
-            console.log("Response text:", http.responseText); // Add this line for debugging
+            console.log("Response text:", http.responseText); // Debugging line
             if (http.status == 201) {
                 try {
                     var responseJSON = JSON.parse(http.responseText);
@@ -47,8 +199,11 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
                     console.error("Failed to parse JSON response:", e);
                     console.error("Response text:", http.responseText);
                 }
+               
                 refresh();
+                // generateCustomerId();
                 fetchAndUpdateTable();
+            
             } else {
                 console.error("Failed to save customer");
                 console.error("Status:", http.status);
@@ -56,12 +211,22 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
             }
         }
     };
+
     http.open("POST", "http://localhost:8080/pos_system_backend_war_exploded/customer", true);
     http.setRequestHeader("Content-Type", "application/json");
     http.send(customerJSON);
-  
 });
 
+// Function to generate a sequential customer ID
+function generateCustomerId() {
+    let customerIdField = document.querySelector('#CustomerManage .custId');
+    lastCustomerId++; // Increment the last used ID
+    let newId = 'C' + String(lastCustomerId).padStart(3, '0'); // Format ID with leading zeros
+    customerIdField.value = newId; // Update the text field with the new ID
+
+    // Store the new last used ID in localStorage
+    localStorage.setItem('lastCustomerId', lastCustomerId);
+}
 
 
 
@@ -69,16 +234,72 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
 
 
 
-//Define the refresh function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function refresh() {
     console.log("Refresh function called");
-    // Clear form fields
+ 
     document.querySelector('#CustomerManage .custId').value = '';
     document.querySelector('#CustomerManage .custName').value = '';
     document.querySelector('#CustomerManage .custAddress').value = '';
     document.querySelector('#CustomerManage .custSalary').value = '';
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

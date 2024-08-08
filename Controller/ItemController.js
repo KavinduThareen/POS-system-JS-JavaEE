@@ -1,4 +1,4 @@
-// import { saveItem, getAllItems, deleteItem, updateItem } from '../model/ItemModel.js';
+
 
 document.querySelector('#ItemManage #ItemForm').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -60,9 +60,66 @@ document.querySelector('#ItemManage .saveBtn').addEventListener('click', functio
     http.setRequestHeader("Content-Type", "application/json");
     http.send(itemJSON);
 
+    
 
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // function validate(item) {
 //     let valid = true;
