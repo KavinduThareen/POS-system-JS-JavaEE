@@ -19,7 +19,7 @@ document.querySelector('#CustomerManage .updateBtn').addEventListener('click', f
 });
 
 document.querySelector('#CustomerManage .saveBtn').addEventListener('click', function() {
-    
+   
     generateCustomerId();
 
     let custId = document.querySelector('#CustomerManage .custId').value;
@@ -33,6 +33,11 @@ document.querySelector('#CustomerManage .saveBtn').addEventListener('click', fun
         address: custAddress,
         salory: custSalary 
     };
+
+    if (!validate(customer)) {
+        console.log("Validation failed");
+        return; 
+    }
 
     const customerJSON = JSON.stringify(customer);
     console.log("Sending data:", customerJSON);
@@ -96,45 +101,38 @@ function refresh() {
 
 // validation
 
-
 function validate(customer) {
     let valid = true;
 
-    if ((/^C0[0-9]+$/).test(customer.custId)) {
+   
+    if (/^C-\d{3}$/.test(customer.id)) {
         document.querySelector('#CustomerManage .invalidCustId').textContent = '';
-        valid = true;
     } else {
         document.querySelector('#CustomerManage .invalidCustId').textContent = 'Invalid Customer Id';
         valid = false;
     }
 
-    if ((/^(?:[A-Z][a-z]*)(?: [A-Z][a-z]*)*$/).test(customer.custName)) {
+   
+    if (/^(?:[A-Z][a-z]*)(?: [A-Z][a-z]*)*$/.test(customer.name)) {
         document.querySelector('#CustomerManage .invalidCustName').textContent = '';
     } else {
         document.querySelector('#CustomerManage .invalidCustName').textContent = 'Invalid Customer Name';
         valid = false;
     }
 
-    if ((/^[A-Z][a-z, ]+$/).test(customer.custAddress)) {
+
+    if (/^[A-Z][a-z, ]+$/.test(customer.address)) {
         document.querySelector('#CustomerManage .invalidCustAddress').textContent = '';
     } else {
         document.querySelector('#CustomerManage .invalidCustAddress').textContent = 'Invalid Customer Address';
         valid = false;
     }
 
-    if (customer.custSalary != null && customer.custSalary > 0) {
+    if (customer.salory != null && customer.salory > 0) {
         document.querySelector('#CustomerManage .invalidCustSalary').textContent = '';
     } else {
         document.querySelector('#CustomerManage .invalidCustSalary').textContent = 'Invalid Customer Salary';
         valid = false;
-    }
-
-    let customers = getAllCustomers();
-    for (let i = 0; i < customers.length; i++) {
-        if (customers[i].custId === customer.custId) {
-            document.querySelector('#CustomerManage .invalidCustId').textContent = 'Customer Id Already Exists';
-            valid = false;
-        }
     }
 
     return valid;
@@ -143,11 +141,82 @@ function validate(customer) {
 
 
 
+
 // load table
+
+
+
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     const url = 'http://localhost:8080/pos_system_backend_war_exploded/customer';
+//     const tableBody = document.querySelector('.tableRow');
+
+//     if (!tableBody) {
+//         console.error('Table body element not found');
+//         return;
+//     }
+
+//     function fetchAndUpdateTable() {
+//         fetch(url)
+//             .then(response => {
+//                 if (!response.ok) {
+//                     throw new Error('Network response was not ok');
+//                 }
+//                 return response.json();
+//             })
+//             .then(data => {
+//                 console.log('Customer Data:', data);
+
+//                 tableBody.innerHTML = '';
+
+//                 data.forEach(customer => {
+//                     const row = document.createElement('tr');
+                    
+//                     const idCell = document.createElement('td');
+//                     idCell.textContent = customer.id;
+//                     row.appendChild(idCell);
+
+//                     const nameCell = document.createElement('td');
+//                     nameCell.textContent = customer.name;
+//                     row.appendChild(nameCell);
+
+//                     const addressCell = document.createElement('td');
+//                     addressCell.textContent = customer.address;
+//                     row.appendChild(addressCell);
+
+//                     const salaryCell = document.createElement('td');
+//                     salaryCell.textContent = customer.salory;
+//                     row.appendChild(salaryCell);
+
+//                     tableBody.appendChild(row);
+//                 });
+//             })
+//             .catch(error => {
+//                 console.error('There was a problem with the fetch operation:', error);
+//             });
+//     }
+
+   
+//     fetchAndUpdateTable();
+
+    
+//     setInterval(fetchAndUpdateTable, 1000);
+// });
+
+
+
+
+
+
+
+
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const url = 'http://localhost:8080/pos_system_backend_war_exploded/customer';
     const tableBody = document.querySelector('.tableRow');
+    let previousData = [];
 
     if (!tableBody) {
         console.error('Table body element not found');
@@ -163,43 +232,69 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then(data => {
-                console.log('Customer Data:', data);
-
-                tableBody.innerHTML = ''; // Clear existing rows
-
-                data.forEach(customer => {
-                    const row = document.createElement('tr');
+                // Compare the new data with the previous data
+                if (JSON.stringify(data) !== JSON.stringify(previousData)) {
+                    console.log('Customer data has changed. Updating the table...');
                     
-                    const idCell = document.createElement('td');
-                    idCell.textContent = customer.id;
-                    row.appendChild(idCell);
+                    tableBody.innerHTML = ''; // Clear existing rows
 
-                    const nameCell = document.createElement('td');
-                    nameCell.textContent = customer.name;
-                    row.appendChild(nameCell);
+                    data.forEach(customer => {
+                        const row = document.createElement('tr');
+                        
+                        const idCell = document.createElement('td');
+                        idCell.textContent = customer.id;
+                        row.appendChild(idCell);
 
-                    const addressCell = document.createElement('td');
-                    addressCell.textContent = customer.address;
-                    row.appendChild(addressCell);
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = customer.name;
+                        row.appendChild(nameCell);
 
-                    const salaryCell = document.createElement('td');
-                    salaryCell.textContent = customer.salory;
-                    row.appendChild(salaryCell);
+                        const addressCell = document.createElement('td');
+                        addressCell.textContent = customer.address;
+                        row.appendChild(addressCell);
 
-                    tableBody.appendChild(row);
-                });
+                        const salaryCell = document.createElement('td');
+                        salaryCell.textContent = customer.salory;
+                        row.appendChild(salaryCell);
+
+                        tableBody.appendChild(row);
+                    });
+
+                    // Update previousData to the current data
+                    previousData = data;
+                }
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
+            })
+            .finally(() => {
+                // Schedule the next update
+                setTimeout(fetchAndUpdateTable, 1000);
             });
     }
 
     // Initial data load
     fetchAndUpdateTable();
-
-    // Set up live refresh every 30 seconds (30000 milliseconds)
-    setInterval(fetchAndUpdateTable, 1000);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -223,6 +318,11 @@ function updateCustomer() {
         address: custAddress,
         salory: custSalary 
     };
+
+    if (!validate(customer)) {
+        console.log("Validation failed");
+        return; 
+    }
 
     const customerJSON = JSON.stringify(customer);
     console.log("Sending data:", customerJSON);

@@ -46,6 +46,12 @@ document.querySelector('#ItemManage .saveBtn').addEventListener('click', functio
         price: itemPrice
     };
 
+    if (!validate(item)) {
+        console.log("Validation failed");
+        return; 
+    }
+
+
     const itemJSON = JSON.stringify(item);
     console.log("Sending data:", itemJSON);
 
@@ -63,7 +69,7 @@ document.querySelector('#ItemManage .saveBtn').addEventListener('click', functio
                     console.error("Response text:", http.responseText);
                 }
                 refresh();
-                fetchAndUpdateTable();
+                // fetchAndUpdateTable();
             } else {
                 console.error("Failed to save item");
                 console.error("Status:", http.status);
@@ -86,47 +92,39 @@ document.querySelector('#ItemManage .saveBtn').addEventListener('click', functio
 
 // validation
 
-
 function validate(item) {
     let valid = true;
 
-    if ((/^I0[0-9]+$/).test(item.itemId)) {
+    // Validate item ID
+    if (/^I-\d{3}$/.test(item.code)) {
         document.querySelector('#ItemManage .invalidCode').textContent = '';
-        valid = true;
     } else {
         document.querySelector('#ItemManage .invalidCode').textContent = 'Invalid Item Id';
         valid = false;
     }
 
-    if ((/^(?:[A-Z][a-z]*)(?: [A-Z][a-z]*)*$/).test(item.itemName)) {
+    // Validate item name
+    if (/^(?:[A-Z][a-z]*)(?: [A-Z][a-z]*)*$/.test(item.name)) {
         document.querySelector('#ItemManage .invalidName').textContent = '';
     } else {
         document.querySelector('#ItemManage .invalidName').textContent = 'Invalid Item Name';
         valid = false;
     }
 
-    if (item.itemQty != null && item.itemQty > 0) {
+    // Validate item quantity
+    if (item.qty != null && item.qty > 0) {
         document.querySelector('#ItemManage .invalidQty').textContent = '';
     } else {
         document.querySelector('#ItemManage .invalidQty').textContent = 'Invalid Item Quantity';
         valid = false;
     }
 
-    if (item.itemPrice != null && item.itemPrice > 0) {
+    // Validate item price
+    if (item.price != null && item.price > 0) {
         document.querySelector('#ItemManage .invalidPrice').textContent = '';
     } else {
         document.querySelector('#ItemManage .invalidPrice').textContent = 'Invalid Item Price';
         valid = false;
-    }
-
-    let items = getAllItems();
-
-    for (let i = 0; i < items.length; i++) {
-        if (items[i].itemId === item.itemId) {
-            document.querySelector('#ItemManage .invalidCode').textContent = 'Item Id already exists';
-            valid = false;
-            return valid;
-        }
     }
 
     return valid;
@@ -140,6 +138,67 @@ function validate(item) {
 
 
 //  load table
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     const url = 'http://localhost:8080/pos_system_backend_war_exploded/item';
+//     const tableBody = document.querySelector('.itemtableRow');
+
+//     if (!tableBody) {
+//         console.error('Table body element not found');
+//         return;
+//     }
+
+//     function fetchAndUpdateTable() {
+//         fetch(url)
+//             .then(response => {
+//                 if (!response.ok) {
+//                     throw new Error('Network response was not ok');
+//                 }
+//                 return response.json();
+//             })
+//             .then(data => {
+//                 console.log('items Data:', data);
+
+//                 tableBody.innerHTML = ''; 
+
+//                 data.forEach(items => {
+//                     const row = document.createElement('tr');
+                    
+//                     const codeCell = document.createElement('td');
+//                     codeCell.textContent = items.code;
+//                     row.appendChild(codeCell);
+
+//                     const nameCell = document.createElement('td');
+//                     nameCell.textContent = items.name;
+//                     row.appendChild(nameCell);
+
+//                     const qtyCell = document.createElement('td');
+//                     qtyCell.textContent = items.qty;
+//                     row.appendChild(qtyCell);
+
+//                     const priceCell = document.createElement('td');
+//                     priceCell.textContent = items.price;
+//                     row.appendChild(priceCell);
+
+//                     tableBody.appendChild(row);
+//                 });
+//             })
+//             .catch(error => {
+//                 console.error('There was a problem with the fetch operation:', error);
+//             });
+//     }
+
+    
+//     fetchAndUpdateTable();
+
+    
+//     setInterval(fetchAndUpdateTable, 1000);
+// });
+
+
+
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const url = 'http://localhost:8080/pos_system_backend_war_exploded/item';
@@ -159,9 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then(data => {
-                console.log('items Data:', data);
-
-                tableBody.innerHTML = ''; // Clear existing rows
+               
+                tableBody.innerHTML = ''; 
 
                 data.forEach(items => {
                     const row = document.createElement('tr');
@@ -190,10 +248,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // Initial data load
+   
     fetchAndUpdateTable();
 
-    // Set up live refresh every 30 seconds (1000 milliseconds)
+   
     setInterval(fetchAndUpdateTable, 1000);
 });
 
@@ -221,6 +279,11 @@ function updateItem() {
         name: itemName,
         qty: itemQty,
         price: itemPrice
+    }
+
+    if (!validate(item)) {
+        console.log("Validation failed");
+        return; 
     }
 
     const itemJSON = JSON.stringify(item);
